@@ -1,0 +1,29 @@
+---
+- name: Ansible Task
+  hosts: all
+  become: yes
+  tasks:
+    - name: Disable SELinux
+      selinux:
+        state: disabled
+    - name: Install Apache
+      yum:
+        name: httpd
+        state: present
+    - name: Start Apache
+      service:
+        name: httpd
+        state: started
+    - name: Download Template
+      get_url:
+        url: https://www.free-css.com/assets/files/free-css-templates/download/page294/troweld.zip
+        dest: /tmp/flexor.zip
+    - name: Install unzip
+      yum:
+        name: unzip
+        state: present
+    - name: Extract Template
+      unarchive:
+        src: /tmp/flexor.zip
+        dest: /var/www/html/
+        remote_src: yes
